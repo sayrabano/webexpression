@@ -1,25 +1,44 @@
-import logo from './logo.svg';
-import './App.css';
 
-function App() {
+import React, { useState } from "react";
+import { BrowserRouter as Router, Route, Routes} from "react-router-dom";
+import ExpressionForm from "./components/ExpressionForm";
+import Result from "./components/Result";
+
+const App = () => {
+  const [rules, setRules] = useState([]);
+  const [combinator, setCombinator] = useState("and");
+
+  const handleFormSubmit = (newExpression) => {
+    setRules([...rules, newExpression]);
+  };
+
+  const handleDeleteRule = (index) => {
+    const updatedRules = [...rules];
+    updatedRules.splice(index, 1);
+    setRules(updatedRules);
+   
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Routes>
+        <Route exact path="/" element={<div className="container mt-5">
+            <ExpressionForm onSubmit={handleFormSubmit} />
+          </div>}/>
+          
+      
+        <Route path="/result" element={<Result
+            rules={rules}
+            combinator={combinator}
+            setCombinator={setCombinator}
+            onDeleteRule={handleDeleteRule}
+          />}
+          />
+          
+        
+      </Routes>
+    </Router>
   );
-}
+};
 
 export default App;
